@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Order #{{ order.id }}</h2>
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <p>
+                <strong>Date:</strong>
+                {{ order.created|date:"F d, Y - h:i A" }}
+            </p>
+
+            <p>
+                <strong>Payment Status:</strong>
+                {% if order.payment_status == 'paid' %}
+                    <span class="badge bg-success">Paid</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% endif %}
+            </p>
+
+            <p class="mb-0">
+                <strong>Total:</strong>
+                ${{ order.total_price }}
+            </p>
+        </div>
+    </div>
+
+    <h4 class="mb-3">Items</h4>
+
+    {% for item in order.items.all %}
+        <div class="card mb-3 border-0 shadow-sm rounded-4">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-2 text-center p-3">
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}"
+                             class="img-fluid rounded"
+                             style="max-height:120px;"
+                             alt="{{ item.product.name }}">
+                    {% endif %}
+                </div>
+
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5>{{ item.product.name }}</h5>
+
+                        <p class="mb-1">
+                            Price: ${{ item.price }}
+                        </p>
+
+                        <p class="mb-1">
+                            Quantity: {{ item.quantity }}
+                        </p>
+
+                        <p class="fw-bold mb-0">
+                            Subtotal:
+                            ${{ item.get_total_price }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">
+            No items found in this order.
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

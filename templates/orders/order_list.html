@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">My Orders</h2>
+
+{% if orders %}
+
+<div class="row">
+
+    {% for order in orders %}
+
+    <div class="col-md-6 mb-3">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <h5>Order #{{ order.id }}</h5>
+
+                <p class="mb-1">
+                    Total: <strong>{{ order.total_price }} EGP</strong>
+                </p>
+
+                <p class="mb-1">
+                    Status:
+                    <span class="badge bg-warning">
+                        {{ order.status }}
+                    </span>
+                </p>
+
+                <p class="text-muted">
+                    {{ order.created_at }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    No orders yet 🛒
+</div>
+
+{% endif %}
+
+{% endblock %}

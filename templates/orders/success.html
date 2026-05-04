@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center mt-5">
+
+    <h2 class="text-success">Order Placed Successfully 🎉</h2>
+
+    <p>Order ID: #{{ order.id }}</p>
+    <p>Total: {{ order.total_price }} EGP</p>
+
+    <a href="{% url 'products:product_list' %}" class="btn btn-primary mt-3">
+        Back to Shopping
+    </a>
+
+</div>
+
+{% endblock %}
