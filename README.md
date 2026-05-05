@@ -4,8 +4,8 @@
 
 ### A high-performance, Full-Stack E-commerce engine architected for scalability and secure transactions.
 
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Django](https://img.shields.io/badge/Django-4.2+-092E20.svg?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![Python](https://img.shields.io/badge/Python-3.14+-3776AB.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/Django-6.0+-092E20.svg?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Ready-316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-6772E5.svg?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com/)
 [![License](https://img.shields.io/badge/License-MIT-F7C948.svg?style=for-the-badge)](LICENSE)
@@ -98,8 +98,8 @@ Django-Core-Commerce/
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| Language | Python 3.11+ | Core language |
-| Framework | Django 4.2+ | Web framework & ORM |
+| Language | Python 3.14+ | Core language |
+| Framework | Django 6.0+ | Web framework & ORM |
 | Database | PostgreSQL / SQLite | Relational data storage |
 | Payments | Stripe | Checkout & Webhook processing |
 | Auth | Django Auth | Session-based user management |
