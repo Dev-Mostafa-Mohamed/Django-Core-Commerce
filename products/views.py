@@ -2,6 +2,7 @@
 from django.views.generic import ListView, DetailView
 from .models import Product, Category
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 
 class ProductListView(ListView):
@@ -19,7 +20,7 @@ class ProductListView(ListView):
         slug = self.kwargs.get('category_slug')
 
         if slug:
-            from django.shortcuts import get_object_or_404
+            
             self.category = get_object_or_404(Category, slug=slug)
             queryset = queryset.filter(category=self.category)
 
