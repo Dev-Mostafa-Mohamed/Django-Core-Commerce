@@ -83,8 +83,11 @@
             <h5>Total Price: {{ total_price }} EGP</h5>
 
             <a href="{% url 'orders:stripe_checkout' %}" class="btn btn-primary w-100 mt-3">
-    Pay with Card 💳
-</a>
+                Pay with Card 💳
+            </a>
+            <a href="{% url 'orders:checkout' %}" class="btn btn-secondary w-100 mt-2">
+                Complete Order (No Payment)
+            </a>
 
         </div>
 

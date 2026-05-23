@@ -1,5 +1,9 @@
 
-from django.shortcuts import redirect, render,get_object_or_404
+import os
+
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Order, OrderItem
 import stripe
 from django.conf import settings
@@ -7,6 +11,7 @@ from django.http import HttpResponse
 from products.models import Product
 from django.contrib.auth.decorators import login_required
 
+@login_required
 def checkout(request):
     cart = request.session.get('cart', {})
 
@@ -107,8 +112,12 @@ def stripe_checkout(request):
     line_items=line_items,
     mode='payment',
 
-    success_url='http://127.0.0.1:8000/orders/success/',
-    cancel_url='http://127.0.0.1:8000/cart/',
+    success_url=request.build_absolute_uri(
+        reverse('orders:success')
+    ) + f'?order_id={order.id}&session_id={{CHECKOUT_SESSION_ID}}',
+    cancel_url=request.build_absolute_uri(
+        reverse('cart:cart_detail')
+    ),
 
     metadata={
         "order_id": order.id
@@ -122,7 +131,19 @@ def stripe_checkout(request):
 
 def success(request):
     order_id = request.GET.get('order_id')
-    order = Order.objects.get(id=order_id)
+    session_id = request.GET.get('session_id')
+
+    order = None
+    if order_id:
+        order = Order.objects.filter(id=order_id).first()
+    elif session_id:
+        order = Order.objects.filter(stripe_session_id=session_id).first()
+
+    if not order:
+        return redirect('products:product_list')
+
+    if order.user and request.user.is_authenticated and order.user != request.user:
+        return redirect('products:product_list')
 
     order.payment_status = 'paid'
     order.save()
@@ -134,10 +155,11 @@ def success(request):
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+@csrf_exempt
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    endpoint_secret = "your_webhook_secret"
+    endpoint_secret = os.environ.get('STRIPE_WEBHOOK_SECRET', 'your_webhook_secret')
 
     try:
         event = stripe.Webhook.construct_event(

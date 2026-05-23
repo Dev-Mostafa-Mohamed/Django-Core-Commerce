@@ -18,6 +18,23 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from products.api import CategoryViewSet, ProductViewSet
+from orders.api import OrderViewSet
+from accounts.api import (
+    RegisterAPIView, LoginAPIView, LogoutAPIView,
+    CurrentUserAPIView, WishlistViewSet
+)
+from cart.api import (
+    CartAPIView, CartAddAPIView, CartItemAPIView,
+    CartClearAPIView
+)
+
+router = DefaultRouter()
+router.register('products', ProductViewSet, basename='product')
+router.register('categories', CategoryViewSet, basename='category')
+router.register('orders', OrderViewSet, basename='order')
+router.register('wishlist', WishlistViewSet, basename='wishlist')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +42,16 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
+    path('api/auth/register/', RegisterAPIView.as_view(), name='api-auth-register'),
+    path('api/auth/login/', LoginAPIView.as_view(), name='api-auth-login'),
+    path('api/auth/logout/', LogoutAPIView.as_view(), name='api-auth-logout'),
+    path('api/auth/user/', CurrentUserAPIView.as_view(), name='api-auth-user'),
+    path('api/cart/', CartAPIView.as_view(), name='api-cart-detail'),
+    path('api/cart/add/', CartAddAPIView.as_view(), name='api-cart-add'),
+    path('api/cart/<int:product_id>/', CartItemAPIView.as_view(), name='api-cart-item'),
+    path('api/cart/clear/', CartClearAPIView.as_view(), name='api-cart-clear'),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 if settings.DEBUG:

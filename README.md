@@ -6,6 +6,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.14+-3776AB.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-6.0+-092E20.svg?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![DRF](https://img.shields.io/badge/Django%20REST%20framework-3.20.0-0A5E8C.svg?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Ready-316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-6772E5.svg?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com/)
 [![License](https://img.shields.io/badge/License-MIT-F7C948.svg?style=for-the-badge)](LICENSE)
@@ -27,6 +28,10 @@
 | Product Catalog | Categoires | Cart | Order History | Wishlist | Administrative Dashboard |
 |:-:|:-:|:-:|:-:|:-:|:-:|
 | ![Home](screenshots/home.png) | ![Categoires](screenshots/categories.png) | ![Cart](screenshots/cart.png) | ![Orders History](screenshots/orders.png) | ![Wishlist](screenshots/wishlist.png) | ![Administrative Dashboard](screenshots/dashboard.png) |
+
+| Products API | Category API | Cart API | Order API | Wishlist API |
+|:-:|:-:|:-:|:-:|:-:|
+| ![ProductsApi](screenshots/ProductsApi.png) | ![CategoryApi](screenshots/CategoryApi.png) | ![CartApi](screenshots/CartApi.png) | ![OrderApi](screenshots/OrderApi.png) | ![WishlistApi](screenshots/WishlistApi.png) | 
 
 ---
 
@@ -103,8 +108,34 @@ Django-Core-Commerce/
 | Database | PostgreSQL / SQLite | Relational data storage |
 | Payments | Stripe | Checkout & Webhook processing |
 | Auth | Django Auth | Session-based user management |
+| API | Django REST framework | JSON REST API for products, cart, wishlist, orders |
 | Frontend | Django Templates + CSS | Server-side rendered UI |
 | Environment | python-decouple / dotenv | Secrets management |
+
+---
+
+## 🚀 New API Additions
+
+This project now maintains the original server-rendered storefront while also exposing a REST API for all commerce operations.
+
+### New API modules
+- `ProductsApi` — list and detail product endpoints
+- `CategoryApi` — category listing endpoints
+- `CartApi` — session-based cart read/write endpoints
+- `WishlistApi` — authenticated wishlist management endpoints
+- `OrderApi` — order creation, order history, and Stripe checkout session endpoints
+
+### Files added / updated for the API
+- `accounts/api.py`
+- `accounts/serializers.py`
+- `cart/api.py`
+- `orders/api.py`
+- `orders/serializers.py`
+- `products/api.py`
+- `products/serializers.py`
+- `config/urls.py`
+- `config/settings.py`
+- `requirements.txt`
 
 ---
 
@@ -190,7 +221,36 @@ Visit `http://127.0.0.1:8000/` — the store is live. ✅
 
 ## 📡 API & URL Reference
 
-### Public Pages
+This project now supports the original Django server-side storefront alongside a full REST API for product catalog, cart, wishlist, and order workflows.
+
+### REST API Endpoints
+
+| Method | URL | Description | Auth Required |
+|---|---|---|---|
+| `GET` | `/api/products/` | List available products | No |
+| `GET` | `/api/products/<id>/` | Product detail | No |
+| `GET` | `/api/categories/` | List categories | No |
+| `GET` | `/api/orders/` | List current user's orders | ✅ Yes |
+| `GET` | `/api/orders/<id>/` | Order detail | ✅ Yes |
+| `POST` | `/api/orders/` | Create order from cart | ✅ Yes |
+| `POST` | `/api/orders/stripe_checkout/` | Create Stripe checkout session | ✅ Yes |
+| `GET` | `/api/cart/` | Get current session cart | No |
+| `POST` | `/api/cart/add/` | Add product to cart | No |
+| `PATCH` | `/api/cart/<product_id>/` | Update cart item quantity | No |
+| `DELETE` | `/api/cart/<product_id>/` | Remove cart item | No |
+| `POST` | `/api/cart/clear/` | Clear the cart | No |
+| `GET` | `/api/wishlist/` | List user wishlist | ✅ Yes |
+| `POST` | `/api/wishlist/` | Add product to wishlist | ✅ Yes |
+| `DELETE` | `/api/wishlist/<id>/` | Remove wishlist item | ✅ Yes |
+| `POST` | `/api/wishlist/toggle/` | Toggle product wishlist state | ✅ Yes |
+| `POST` | `/api/auth/register/` | Register new user | No |
+| `POST` | `/api/auth/login/` | Login user | No |
+| `POST` | `/api/auth/logout/` | Logout user | ✅ Yes |
+| `GET` | `/api/auth/user/` | Current authenticated user | No |
+
+### Existing Web Pages
+
+#### Public Pages
 
 | Method | URL | Description |
 |---|---|---|
@@ -198,7 +258,7 @@ Visit `http://127.0.0.1:8000/` — the store is live. ✅
 | `GET` | `/<int:pk>/<slug:slug>/` | Product detail page |
 | `GET` | `/category/<slug:category_slug>/` | category_products |
 
-### Cart
+#### Cart
 
 | Method | URL | Description |
 |---|---|---|
@@ -207,7 +267,7 @@ Visit `http://127.0.0.1:8000/` — the store is live. ✅
 | `POST` | `/cart/update/<product_id>/` | Update item quantity |
 | `POST` | `/cart/remove/<product_id>/` | Remove item from cart |
 
-### Orders & Checkout
+#### Orders & Checkout
 
 | Method | URL | Description | Auth Required |
 |---|---|---|---|
@@ -217,7 +277,7 @@ Visit `http://127.0.0.1:8000/` — the store is live. ✅
 | `GET` | `/orders/history/` | User's order history | ✅ Yes |
 | `POST` | `/orders/webhook/` | Stripe webhook handler | Stripe Only |
 
-### Accounts & Wishlist
+#### Accounts & Wishlist
 
 | Method | URL | Description | Auth Required |
 |---|---|---|---|

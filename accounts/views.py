@@ -14,7 +14,7 @@ def register_view(request):
         return redirect('products:product_list')
 
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.nnPOST)
 
         if form.is_valid():
             user = form.save()
